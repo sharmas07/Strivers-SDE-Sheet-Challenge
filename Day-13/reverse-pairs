@@ -1,0 +1,66 @@
+#include <bits/stdc++.h> 
+
+void merge(vector<int>&arr, int s, int e){
+	int mid = s + (e-s)/2;
+	int len1 = mid - s + 1;
+	int len2 = e - mid;
+
+	int *first = new int[len1];
+	int *second = new int[len2];
+
+	// copy arrays
+	int mainArrIdx = s;
+	for(int i = 0;i<len1;i++){
+		first[i] = arr[mainArrIdx++];
+	}
+	mainArrIdx = mid + 1;
+	for(int i = 0;i<len2;i++){
+		second[i] = arr[mainArrIdx++];
+	}
+
+	int idx1 = 0;
+	int idx2 = 0;
+	mainArrIdx = s;
+	while(idx1 < len1 && idx2 < len2){
+		if(first[idx1] < second[idx2]){
+			arr[mainArrIdx++] = first[idx1++];
+		}
+		else{
+			arr[mainArrIdx++] = second[idx2++];
+		}
+	}
+	while(idx1 < len1){
+		arr[mainArrIdx++] = first[idx1++];
+	}
+	while(idx2 < len2){
+		arr[mainArrIdx++] = second[idx2++];
+	}
+ 
+}
+int countPairs(vector<int> &arr, int s, int mid, int e){
+	int cnt = 0;
+	int right = mid+1;
+	for(int i = s;i<=mid;i++){
+		while(right <= e && arr[i] > 2*arr[right]) right++;
+		cnt += (right - (mid + 1));
+	}
+	return cnt;
+}
+int mergeSort(vector<int> &arr, int s, int e){
+	int cnt = 0;
+	if(s >= e){
+		return cnt;
+	}
+	int mid = s + (e-s)/2;
+	cnt += mergeSort(arr, s, mid);
+	cnt += mergeSort(arr, mid + 1, e);
+	cnt += countPairs(arr, s, mid, e);
+	merge(arr, s, e);
+	return cnt;
+}
+
+int reversePairs(vector<int> &arr, int n){
+	return mergeSort(arr, 0, n-1);
+}
+
+// TC --> O(2*n*logn)
