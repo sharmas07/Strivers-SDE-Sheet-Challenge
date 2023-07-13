@@ -21,7 +21,7 @@ vector<vector<int>> findSubsetsThatSumToK(vector<int> arr, int n, int k)
     vector<vector<int>> ans;
     vector<int> subSet;
     int index = 0;
-    int subSetSum = 0;
+    int subSetSum = 0; 
     solve(n, arr, index, ans, subSet, subSetSum, k);
 
     return ans;
